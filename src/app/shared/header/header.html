@@ -1,0 +1,150 @@
+<header class="main-header">
+  <h1>
+    <i [class]="pageIcon"></i>
+    {{ pageTitle }}
+  </h1>
+
+  <div class="header-actions">
+    <!-- Botón de Notificaciones (Desktop) -->
+    <button class="notification-btn" 
+            (click)="toggleNotificationDropdown($event)"
+            [class.active]="isNotificationDropdownOpen">
+      <i class="fas fa-bell"></i>
+      <span class="notification-badge" *ngIf="unreadNotificationsCount > 0">
+        {{ unreadNotificationsCount }}
+      </span>
+
+      <!-- Dropdown de Notificaciones -->
+      <div class="notification-dropdown" *ngIf="isNotificationDropdownOpen" (click)="$event.stopPropagation()">
+        <div class="notification-header">
+          <h3>Notificaciones</h3>
+          <span class="mark-read" (click)="markAllAsRead()">Marcar como leídas</span>
+        </div>
+        
+        <div class="notification-list">
+          <div *ngFor="let notification of notifications" 
+               class="notification-item"
+               [class.unread]="!notification.isRead"
+               (click)="markNotificationAsRead(notification)">
+            <div class="notification-icon" [class]="notification.type">
+              <i [class]="notification.icon"></i>
+            </div>
+            <div class="notification-content">
+              <h4>{{ notification.title }}</h4>
+              <p>{{ notification.message }}</p>
+              <div class="notification-time">{{ notification.time }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view-all">
+          <a href="#">Ver todas las notificaciones</a>
+        </div>
+      </div>
+    </button>
+
+    <!-- Perfil de Usuario -->
+    <div class="user-profile" 
+         (click)="toggleProfileDropdown($event)"
+         [class.active]="isProfileDropdownOpen">
+      <div class="user-avatar">{{ userInitials }}</div>
+      <div class="user-details">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-branch">{{ userBranch }}</span>
+      </div>
+
+      <!-- Dropdown del perfil -->
+      <div class="profile-dropdown" *ngIf="isProfileDropdownOpen" (click)="$event.stopPropagation()">
+        <div class="dropdown-header">
+          <div class="dropdown-avatar">{{ userInitials }}</div>
+          <h4>{{ userName }}</h4>
+          <p>{{ userRole }}</p>
+        </div>
+
+        <div class="dropdown-stats">
+          <div class="stat-item">
+            <span class="number">{{ userStats.routes }}</span>
+            <span class="label">Rutas</span>
+          </div>
+          <div class="stat-item">
+            <span class="number">{{ userStats.clients }}</span>
+            <span class="label">Clientes</span>
+          </div>
+          <div class="stat-item">
+            <span class="number">{{ userStats.success }}%</span>
+            <span class="label">Éxito</span>
+          </div>
+        </div>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-user"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </li>
+          <li class="mobile-only">
+            <a href="#" class="dropdown-item" (click)="toggleMobileNotificationModal($event)">
+              <i class="fas fa-bell"></i>
+              <span>Notificaciones</span>
+              <span class="notification-badge-menu" *ngIf="unreadNotificationsCount > 0">
+                {{ unreadNotificationsCount }}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Mi Agenda</span>
+            </a>
+          </li>
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item logout" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Modal de notificaciones para móvil -->
+<div class="mobile-notification-modal" 
+     [class.active]="isMobileNotificationModalOpen"
+     (click)="closeMobileNotificationModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Notificaciones</h3>
+      <button class="close-modal" (click)="closeMobileNotificationModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="notification-list">
+        <div *ngFor="let notification of notifications" 
+             class="notification-item"
+             [class.unread]="!notification.isRead"
+             (click)="markNotificationAsRead(notification)">
+          <div class="notification-icon" [class]="notification.type">
+            <i [class]="notification.icon"></i>
+          </div>
+          <div class="notification-content">
+            <h4>{{ notification.title }}</h4>
+            <p>{{ notification.message }}</p>
+            <div class="notification-time">{{ notification.time }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-all">
+        <a href="#">Ver todas las notificaciones</a>
+      </div>
+    </div>
+  </div>
+</div>

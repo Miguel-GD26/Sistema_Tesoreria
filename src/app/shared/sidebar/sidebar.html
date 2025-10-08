@@ -1,0 +1,63 @@
+<!-- Botón hamburguesa para móviles -->
+<button class="menu-toggle" (click)="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
+
+<!-- Overlay para cerrar el menú -->
+<div class="overlay" [class.active]="isOpen" (click)="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" [class.active]="isOpen">
+  <div class="sidebar-header">
+    <img src="https://miguelgd26.pythonanywhere.com/static/img/logo.png" alt="Company Logo" class="logo">
+  </div>
+
+  <ul class="nav-list">
+    <!-- Iterar sobre los elementos del menú -->
+    <li *ngFor="let item of menuItems" class="nav-item" 
+        [class.active-page]="item.isActive"
+        [class.dropdown]="item.subMenu"
+        [class.active]="item.isOpen">
+      
+      <!-- Si tiene submenú -->
+      <a *ngIf="item.subMenu" 
+         class="nav-link dropdown-toggle" 
+         (click)="toggleMenuItem(item)">
+        <i [class]="item.icon + ' nav-icon'"></i>
+        <span>{{ item.label }}</span>
+        <i class="fas fa-chevron-right arrow"></i>
+      </a>
+
+      <!-- Si no tiene submenú -->
+      <a *ngIf="!item.subMenu" 
+         [routerLink]="item.route" 
+         class="nav-link"
+         (click)="closeSidebar()">
+        <i [class]="item.icon + ' nav-icon'"></i>
+        <span>{{ item.label }}</span>
+      </a>
+
+      <!-- Submenú de primer nivel -->
+      <ul *ngIf="item.subMenu" class="submenu">
+        <li *ngFor="let subItem of item.subMenu" 
+            class="submenu-item"
+            [class.active]="subItem.isOpen">
+          
+          <a class="submenu-toggle" (click)="toggleSubMenuItem(subItem)">
+            <span>{{ subItem.label }}</span>
+            <i class="fas fa-chevron-right arrow-submenu"></i>
+          </a>
+
+          <!-- Submenú de segundo nivel -->
+          <ul *ngIf="subItem.subItems" class="submenu-level-2">
+            <li *ngFor="let subSubItem of subItem.subItems">
+              <a [routerLink]="subSubItem.route" (click)="closeSidebar()">
+                {{ subSubItem.label }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
