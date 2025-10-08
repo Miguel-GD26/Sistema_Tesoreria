@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface Notification {
   id: number;
@@ -89,6 +90,8 @@ export class HeaderComponent {
     }
   ];
 
+  constructor(private router: Router) {}
+  
   get unreadNotificationsCount(): number {
     return this.notifications.filter(n => !n.isRead).length;
   }
@@ -130,7 +133,13 @@ export class HeaderComponent {
   }
 
   logout(): void {
-    // Implementar lógica de cierre de sesión
-    console.log('Cerrando sesión...');
+    // Limpiar sesión
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('username');
+    
+    // Redirigir al login
+    this.router.navigate(['/login']);
+    
+    console.log('Sesión cerrada');
   }
 }
