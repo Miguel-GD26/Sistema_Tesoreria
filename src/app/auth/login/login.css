@@ -399,37 +399,6 @@
   font-weight: 500;
 }
 
-/* Botón Google */
-.btn-google {
-  width: 100%;
-  padding: 1.1rem;
-  background: white;
-  color: #1A202C;
-  border: 2px solid #E2E8F0;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  animation: fadeInUp 0.8s ease 0.6s backwards;
-}
-
-.btn-google:hover {
-  background: #f8f9fa;
-  border-color: #CBD5E1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-}
-
 /* Información de prueba */
 .test-info {
   margin-top: 1.5rem;

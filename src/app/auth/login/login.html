@@ -15,19 +15,14 @@
     
     <!-- Logo y bienvenida -->
     <div class="logo-container">
-      <img src="https://miguelgd26.pythonanywhere.com/static/img/logo.png" alt="Comercial Lacagua" class="logo">
+      <img src="ZephyrGo.png" alt="Comercial Lacagua" class="logo">
       <h1 class="welcome-text">¡Bienvenido de nuevo!</h1>
       <p class="subtitle">Introduce tus credenciales para acceder.</p>
     </div>
 
     <!-- Formulario -->
     <form class="login-form" (ngSubmit)="onSubmit()">
-      <!-- Mensaje de error -->
-      <div class="error-message" *ngIf="errorMessage">
-        <i class="fas fa-exclamation-circle"></i>
-        {{ errorMessage }}
-      </div>
-
+      
       <div class="form-group">
         <div class="input-wrapper">
           <i class="fas fa-user input-icon"></i>
