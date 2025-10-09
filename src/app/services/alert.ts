@@ -151,7 +151,7 @@ export class AlertService {
       html: `
         <div style="display: flex; flex-direction: column; align-items: center; padding: 1rem;">
           <img src="${gifUrl || defaultGif}" 
-               style="width: 220px; height: 220px; object-fit: contain; margin-bottom: 1rem;" 
+               style="width: 210px; height: 210px; object-fit: contain; margin-bottom: 1rem;" 
                alt="Cargando...">
           <div style="color: #64748B; font-size: 0.98rem; margin-top: 0.5rem;">
             Esto puede tomar unos segundos...
