@@ -3,7 +3,7 @@ const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const appName = 'sistema-tesoreria'; // Asegúrate que este nombre sea correcto
+const appName = 'sistema-tesoreria'; // Asegúrate de que este nombre sea correcto
 
 // --- CONFIGURACIÓN DEL PROXY ---
 const apiProxy = createProxyMiddleware({
@@ -13,18 +13,17 @@ const apiProxy = createProxyMiddleware({
 });
 
 // --- APLICAR EL PROXY A LA RUTA /api ---
-// ESTO DEBE IR ANTES DE SERVIR LOS ARCHIVOS ESTÁTICOS.
+// Todas las peticiones que empiecen con /api serán manejadas por el proxy.
 app.use('/api', apiProxy);
 
 // --- SERVIR LOS ARCHIVOS ESTÁTICOS DE ANGULAR ---
 const distDir = path.join(__dirname, `dist/${appName}/browser`);
 app.use(express.static(distDir));
 
-// --- MANEJAR LAS RUTAS DE ANGULAR (CORREGIDO) ---
-// Cualquier otra petición GET que no sea a /api o un archivo estático,
-// debe ser manejada por Angular.
-// CAMBIO: Usamos '*' en lugar de '/*'.
-app.get('*', (req, res) => {
+// --- MANEJAR LAS RUTAS DE ANGULAR (MÉTODO CORREGIDO) ---
+// Esta ruta debe ser la ÚLTIMA. Captura cualquier petición que no haya sido
+// manejada por el proxy o por los archivos estáticos y la envía a index.html.
+app.use((req, res) => {
     res.sendFile(path.join(distDir, 'index.html'));
 });
 
