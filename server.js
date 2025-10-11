@@ -1,39 +1,37 @@
 const express = require('express');
 const path = require('path');
-const { createProxyMiddleware } = require('http-proxy-middleware'); // <-- 1. Importamos el middleware de proxy
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const appName = 'sistema-tesoreria';
+const appName = 'sistema-tesoreria'; // Asegúrate que este nombre sea correcto
 
-// --- 2. CONFIGURACIÓN DEL PROXY ---
-const targetApiUrl = 'https://comercial.devsbee.com';
-const apiProxy = createProxyMiddleware('/api', {
-    target: targetApiUrl,
-    changeOrigin: true, // Fundamental para evitar errores de CORS
-    pathRewrite: {
-        // No necesitamos reescribir la ruta, ya que /api existe en el target
-    },
-    onProxyReq: (proxyReq, req, res) => {
-        console.log(`[Proxy] Redirigiendo ${req.method} a ${targetApiUrl}${proxyReq.path}`);
-    }
+// --- CONFIGURACIÓN DEL PROXY (CORREGIDA) ---
+const apiProxy = createProxyMiddleware({
+    target: 'https://comercial.devsbee.com', // El destino de la API
+    changeOrigin: true, // Necesario para evitar problemas de CORS y host
+    // No necesitamos pathRewrite porque la ruta /api debe pasarse al target
+    logLevel: 'debug', // Muestra logs detallados del proxy en la consola de Railway
 });
 
-// --- 3. APLICAMOS EL PROXY A LAS RUTAS /api ---
-// Cualquier petición que empiece con /api será manejada por el proxy
-app.use(apiProxy);
+// --- APLICAR EL PROXY A LA RUTA /api ---
+// Todas las peticiones que empiecen con /api serán manejadas por el proxy.
+// ESTO DEBE IR ANTES DE SERVIR LOS ARCHIVOS ESTÁTICOS.
+app.use('/api', apiProxy);
 
-// --- 4. SERVIR LOS ARCHIVOS ESTÁTICOS DE ANGULAR ---
+// --- SERVIR LOS ARCHIVOS ESTÁTICOS DE ANGULAR ---
 const distDir = path.join(__dirname, `dist/${appName}/browser`);
 app.use(express.static(distDir));
 
-// --- 5. MANEJAR LAS RUTAS DE ANGULAR (DEBE IR DESPUÉS DEL PROXY Y LOS ESTÁTICOS) ---
+// --- MANEJAR LAS RUTAS DE ANGULAR ---
 // Cualquier otra petición GET que no sea a /api se redirige al index.html
+// Esto permite que el enrutador de Angular funcione correctamente.
 app.get('/*', (req, res) => {
     res.sendFile(path.join(distDir, 'index.html'));
 });
 
-// --- 6. INICIAR EL SERVIDOR ---
+// --- INICIAR EL SERVIDOR ---
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Servidor de Angular con proxy iniciado en el puerto ${port}`);
+    console.log(`Las peticiones a /api se redirigirán a https://comercial.devsbee.com`);
 });
