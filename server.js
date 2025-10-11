@@ -5,20 +5,15 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 const appName = 'sistema-tesoreria';
 
-// --- CONFIGURACIÓN DEL PROXY (CORREGIDA) ---
+// --- CONFIGURACIÓN DEL PROXY (CON LÓGICA ALTERNATIVA) ---
 const apiProxy = createProxyMiddleware({
-    target: 'https://comercial.devsbee.com',
+    // CAMBIO 1: El target ahora incluye /api
+    target: 'https://comercial.devsbee.com/api', 
     changeOrigin: true,
     logLevel: 'debug',
-    /**
-     * --- ¡CAMBIO CRUCIAL AQUÍ! ---
-     * pathRewrite le dice al proxy cómo modificar la ruta antes de enviarla.
-     * En este caso, le decimos que reemplace '^/api' con '/api'.
-     * Esto parece redundante, pero efectivamente le dice al proxy:
-     * "Usa '/api' para identificar qué peticiones redirigir, pero NO lo quites de la URL final".
-     */
+    // CAMBIO 2: pathRewrite ahora quita /api de la ruta
     pathRewrite: {
-        '^/api': '/api',
+        '^/api': '', // Reemplaza /api con una cadena vacía
     },
 });
 
@@ -38,5 +33,5 @@ app.use((req, res) => {
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Servidor de Angular con proxy iniciado en el puerto ${port}`);
-    console.log(`Las peticiones a /api se redirigirán a https://comercial.devsbee.com`);
+    console.log(`Las peticiones a /api se redirigirán a https://comercial.devsbee.com/api`);
 });
