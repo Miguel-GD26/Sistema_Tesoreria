@@ -32,8 +32,7 @@ export class SidebarComponent {
     {
       label: 'Dashboard',
       icon: 'fas fa-tachometer-alt',
-      route: '/dashboard',
-      isActive: true
+      route: '/dashboard'
     },
     {
       label: 'Tesorería',
@@ -95,11 +94,7 @@ export class SidebarComponent {
       subMenu: [
         {
           label: 'Gestión de Usuarios',
-          isOpen: false,
-          subItems: [
-            { label: 'Alta de Usuarios', route: '/admin/usuarios/alta' },
-            { label: 'Baja de Usuarios', route: '/admin/usuarios/baja' }
-          ]
+          route:'/admin/usuarios'
         },
         {
           label: 'Seguridad',

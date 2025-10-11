@@ -15,7 +15,5 @@ export class MainLayoutComponent {
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    // Este listener ayuda a cerrar dropdowns cuando se hace click fuera
-    // La lógica específica está en cada componente
   }
 }

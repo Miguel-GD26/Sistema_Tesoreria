@@ -1,0 +1,129 @@
+<div class="modal-overlay">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+            <h2>{{ isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}</h2>
+            <button class="close-button" (click)="onClose()">&times;</button>
+        </header>
+
+        <form #userForm="ngForm" (ngSubmit)="onSave()">
+            <div class="modal-body">
+                <!-- Zona para errores generales -->
+                <div *ngIf="apiErrors['non_field_errors']" class="api-error-message general-error">
+                    <p *ngFor="let error of apiErrors['non_field_errors']">{{ error }}</p>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="input-icon fas fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            [(ngModel)]="userModel.username" 
+                            required 
+                            [disabled]="isEditMode" 
+                            class="form-input"
+                            placeholder=" ">
+                        <label for="username" class="form-label">Nombre de Usuario *</label>
+                    </div>
+                    <div *ngIf="apiErrors['username']" class="api-error-message">
+                        <p *ngFor="let error of apiErrors['username']">{{ error }}</p>
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="input-icon fas fa-id-card"></i>
+                        <input 
+                            type="text" 
+                            id="full_name" 
+                            name="full_name" 
+                            [(ngModel)]="userModel.full_name" 
+                            required 
+                            class="form-input"
+                            placeholder=" ">
+                        <label for="full_name" class="form-label">Nombre Completo *</label>
+                    </div>
+                    <div *ngIf="apiErrors['full_name']" class="api-error-message">
+                        <p *ngFor="let error of apiErrors['full_name']">{{ error }}</p>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="input-icon fas fa-envelope"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            [(ngModel)]="userModel.email" 
+                            required 
+                            email 
+                            class="form-input"
+                            placeholder=" ">
+                        <label for="email" class="form-label">Correo Electrónico *</label>
+                    </div>
+                    <div *ngIf="apiErrors['email']" class="api-error-message">
+                        <p *ngFor="let error of apiErrors['email']">{{ error }}</p>
+                    </div>
+                </div>
+
+                <!-- Password (solo para creación) -->
+                <ng-container *ngIf="!isEditMode">
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <i class="input-icon fas fa-lock"></i>
+                            <input 
+                                [type]="showPassword ? 'text' : 'password'" 
+                                id="password" 
+                                name="password" 
+                                [(ngModel)]="userModel.password" 
+                                required 
+                                minlength="8" 
+                                class="form-input has-toggle"
+                                placeholder=" ">
+                            <label for="password" class="form-label">Contraseña *</label>
+                            <i class="toggle-password" (click)="showPassword = !showPassword">
+                                <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                            </i>
+                        </div>
+                        <div *ngIf="apiErrors['password']" class="api-error-message">
+                            <p *ngFor="let error of apiErrors['password']">{{ error }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <i class="input-icon fas fa-lock"></i>
+                            <input 
+                                [type]="showPasswordConfirm ? 'text' : 'password'" 
+                                id="password_confirm" 
+                                name="password_confirm" 
+                                [(ngModel)]="userModel.password_confirm" 
+                                required 
+                                class="form-input has-toggle"
+                                placeholder=" ">
+                            <label for="password_confirm" class="form-label">Confirmar Contraseña *</label>
+                            <i class="toggle-password" (click)="showPasswordConfirm = !showPasswordConfirm">
+                                <i [class]="showPasswordConfirm ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                            </i>
+                        </div>
+                        <div *ngIf="apiErrors['password_confirm']" class="api-error-message">
+                            <p *ngFor="let error of apiErrors['password_confirm']">{{ error }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="onClose()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                    {{ isEditMode ? 'Guardar Cambios' : 'Crear Usuario' }}
+                </button>
+            </footer>
+        </form>
+    </div>
+</div>

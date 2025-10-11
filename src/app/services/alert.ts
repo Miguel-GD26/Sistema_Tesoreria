@@ -144,7 +144,7 @@ export class AlertService {
    * Loading personalizado con GIF
    */
   loadingWithGif(message: string = 'Procesando...', gifUrl?: string) {
-    const defaultGif = 'progress.gif'; // GIF por defecto (spinner azul)
+    const defaultGif = 'progress.gif';
     
     return Swal.fire({
       title: message,

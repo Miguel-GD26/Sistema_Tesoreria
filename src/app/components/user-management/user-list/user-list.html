@@ -1,0 +1,110 @@
+<div class="container">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="header-text">
+        <h1>Gestión de Usuarios</h1>
+        <p class="header-subtitle">Administra los usuarios del sistema</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <i class="fas fa-plus"></i>
+      <span>Crear Usuario</span>
+    </button>
+  </header>
+
+  <div *ngIf="isLoading; else userTable" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Cargando usuarios...</p>
+  </div>
+
+  <ng-template #userTable>
+    <div class="table-card">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-id-card"></i>
+                  <span>Nombre Completo</span>
+                </div>
+              </th>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-user"></i>
+                  <span>Usuario</span>
+                </div>
+              </th>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-envelope"></i>
+                  <span>Correo</span>
+                </div>
+              </th>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>Rol</span>
+                </div>
+              </th>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-toggle-on"></i>
+                  <span>Estado</span>
+                </div>
+              </th>
+              <th>
+                <div class="th-content">
+                  <i class="fas fa-cog"></i>
+                  <span>Acciones</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users; let i = index" [style.animation-delay.s]="i * 0.05">
+              <td>
+                <span class="user-name">{{ user.full_name }}</span>
+              </td>
+              <td>
+                <span class="username-badge">@{{ user.username }}</span>
+              </td>
+              <td>
+                <span class="email-text">{{ user.email }}</span>
+              </td>
+              <td>
+                <span class="role-badge">{{ userService.getRoleName(user.rol) }}</span>
+              </td>
+              <td>
+                <span class="status" [class.status-active]="user.is_active" [class.status-inactive]="!user.is_active">
+                  <i [class]="user.is_active ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                  {{ user.is_active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon btn-edit" (click)="openEditModal(user)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn-icon btn-danger" (click)="onDeleteUser(user)" title="Eliminar">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- El Modal se muestra condicionalmente -->
+<app-user-modal *ngIf="isModalOpen" 
+                [userToEdit]="selectedUser" 
+                (closeModal)="handleCloseModal()"
+                (saveSuccess)="handleSaveSuccess()">
+</app-user-modal>

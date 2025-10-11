@@ -13,13 +13,12 @@
   </div>
 
   <ul class="nav-list">
-    <!-- Iterar sobre los elementos del menú -->
+    <!-- Iterar sobre los elementos del menú principal -->
     <li *ngFor="let item of menuItems" class="nav-item" 
-        [class.active-page]="item.isActive"
-        [class.dropdown]="item.subMenu"
-        [class.active]="item.isOpen">
+        [class.active]="item.isOpen"
+        routerLinkActive="active-page" [routerLinkActiveOptions]="{exact: true}">
       
-      <!-- Si tiene submenú -->
+      <!-- CASO 1: Es un menú desplegable (tiene subMenu) -->
       <a *ngIf="item.subMenu" 
          class="nav-link dropdown-toggle" 
          (click)="toggleMenuItem(item)">
@@ -28,8 +27,8 @@
         <i class="fas fa-chevron-right arrow"></i>
       </a>
 
-      <!-- Si no tiene submenú -->
-      <a *ngIf="!item.subMenu" 
+      <!-- CASO 2: Es un enlace directo (NO tiene subMenu) -->
+      <a *ngIf="!item.subMenu && item.route" 
          [routerLink]="item.route" 
          class="nav-link"
          (click)="closeSidebar()">
@@ -37,20 +36,33 @@
         <span>{{ item.label }}</span>
       </a>
 
-      <!-- Submenú de primer nivel -->
+      <!-- Renderizado del submenú de primer nivel -->
       <ul *ngIf="item.subMenu" class="submenu">
         <li *ngFor="let subItem of item.subMenu" 
             class="submenu-item"
-            [class.active]="subItem.isOpen">
-          
-          <a class="submenu-toggle" (click)="toggleSubMenuItem(subItem)">
+            [class.active]="subItem.isOpen"
+            routerLinkActive="active-page" [routerLinkActiveOptions]="{exact: true}">
+
+          <!-- CASO 3: El sub-item es un DESPLEGABLE (tiene subItems) -->
+          <a *ngIf="subItem.subItems"
+             class="submenu-toggle" 
+             (click)="toggleSubMenuItem(subItem)">
             <span>{{ subItem.label }}</span>
             <i class="fas fa-chevron-right arrow-submenu"></i>
           </a>
 
-          <!-- Submenú de segundo nivel -->
+          <!-- CASO 4: El sub-item es un ENLACE DIRECTO (NO tiene subItems) -->
+          <a *ngIf="!subItem.subItems && subItem.route"
+             [routerLink]="subItem.route"
+             class="submenu-toggle"
+             (click)="closeSidebar()">
+            <span>{{ subItem.label }}</span>
+          </a>
+
+          <!-- Renderizado del submenú de segundo nivel (sin cambios) -->
           <ul *ngIf="subItem.subItems" class="submenu-level-2">
-            <li *ngFor="let subSubItem of subItem.subItems">
+            <li *ngFor="let subSubItem of subItem.subItems"
+                routerLinkActive="active-page" [routerLinkActiveOptions]="{exact: true}">
               <a [routerLink]="subSubItem.route" (click)="closeSidebar()">
                 {{ subSubItem.label }}
               </a>
