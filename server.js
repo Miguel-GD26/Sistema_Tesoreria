@@ -7,7 +7,7 @@ const appName = 'sistema-tesoreria'; // Asegúrate de que este nombre sea correc
 
 // --- CONFIGURACIÓN DEL PROXY ---
 const apiProxy = createProxyMiddleware({
-    target: 'https://comercial.devsbee.com',
+    target: 'https://comercial.devsbee.com/api/',
     changeOrigin: true,
     logLevel: 'debug', 
 });
